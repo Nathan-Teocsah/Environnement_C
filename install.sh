@@ -2,14 +2,14 @@ ok=0
 PATH_INSTALL="$(pwd)"
 >"enligne.sh"
 chmod +x enligne.sh
-while read ligne
+while read -r ligne
 do
 	if [ $ok = 1 ]
 	then
 		if [[ $ligne = "PATH_CENLIGNE=" ]]
 		then
 			texte="$ligne"
-			texte+='"$PATH_INSTALL"'
+			texte+='"'$PATH_INSTALL'"'
 			echo "$texte" >> "enligne.sh"
 		else
 			echo $ligne >> "enligne.sh"
@@ -31,6 +31,7 @@ exit 1
 # ATTENTION : si un commentaire contient une accolade cela va faire planter le programme !!
 
 PATH_CENLIGNE=
+COMPIL="gcc"
 Temp=$PATH_CENLIGNE
 Temp+=temp.c
 copy_Temp=$PATH_CENLIGNE
@@ -170,7 +171,7 @@ do
 			done <$Temp
 			
 			texte=()
-			gcc $copy_Temp -o $PATH_CENLIGNE/a.out "${opt[@]}"
+			$COMPIL $copy_Temp -o $PATH_CENLIGNE/a.out "${opt[@]}"
 			if [ $? -eq 0 ]; then
 				echo ""
 				echo "--> Execution..."
@@ -185,7 +186,7 @@ do
 			fi
 		fi
 		
-		if [[ ( "$commande" == *";" && $compte_global1 = $compte_global2 ) || ( $compte_global1 = $compte_global2 ) ]]
+		if [[ ( "$commande" == *";" && $compte_global1 = $compte_global2 ) || ( $compte_global1 = $compte_global2 && $compte_global1 != 0 ) ]]
 		then
 			>$copy_Temp
 			compte1=0
@@ -208,7 +209,7 @@ do
 			done <$Temp
 			
 			texte=()
-			gcc $copy_Temp -o $PATH_CENLIGNE/a.out "${opt[@]}"
+			$COMPIL $copy_Temp -o $PATH_CENLIGNE/a.out "${opt[@]}"
 			
 			if [ $? -eq 0 ]; then
 				echo ""
@@ -235,7 +236,7 @@ do
 		fi
 	else
 		read -r prompt lib <<< "$commande"
-		gcc$Temp "${opt[@]}" "$lib"
+		$COMPIL$Temp "${opt[@]}" "$lib"
 
 		if [ $? -eq 0 ]; then
 			opt+=("$lib")
