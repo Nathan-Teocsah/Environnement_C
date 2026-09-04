@@ -1,5 +1,5 @@
 ok=0
-PATH_INSTALL="$(pwd)"
+PATH_INSTALL="$(pwd)/"
 >"enligne.sh"
 chmod +x enligne.sh
 while read -r ligne
@@ -96,7 +96,7 @@ do
 			>$Temp
 			echo ""
 			echo "--> Chargement..."
-			while read ligne
+			while read -r ligne
 			do
 				compte_global1=$((compte_global1 + $(echo "$ligne" | sed -e 's/\(.\)/\1\n/g' | grep -F { | wc -l)))
 				compte_global2=$((compte_global2 + $(echo "$ligne" | sed -e 's/\(.\)/\1\n/g' | grep -F } | wc -l)))
@@ -116,7 +116,8 @@ do
 			compte_global1=$((compte_global1-1))
 			compte_global2=$((compte_global2-1))
 			echo "--> Chargement Terminé !"
-			echo ""
+	
+		echo ""
 		else
 			echo "--> Le fichier '$name_of_file' n'existe pas."
 		fi
@@ -140,10 +141,14 @@ do
 	if [[ "$commande" = ".exe" ]]
 	then
 		echo ""
-		echo "--> Execution..."
-		$PATH_CENLIGNE/a.out
-		echo "--> Executé !"
-		echo ""
+		$COMPIL $copy_Temp -o $PATH_CENLIGNE/a.out "${opt[@]}"
+		if [ $? -eq 0 ]; then
+			echo "--> Execution..."
+			$PATH_CENLIGNE/a.out
+			echo ""
+			echo "--> Executé !"
+			echo ""
+		fi
 		continue
 	fi
 	
@@ -175,13 +180,21 @@ do
 			if [ $? -eq 0 ]; then
 				echo ""
 				echo "--> Execution..."
-				>$Temp
-				while read ligne
-				do
-					echo "$ligne" >>$Temp
-				done <$copy_Temp
 				$PATH_CENLIGNE/a.out
-				echo "--> Exécuté !"
+				echo ""
+				aout_exit_code=$?
+				
+				if [ $aout_exit_code -eq 0 ]
+				then
+					>$Temp
+					while read ligne
+					do
+						echo "$ligne" >>$Temp
+					done <$copy_Temp
+					echo "--> Exécuté !"
+				else
+					echo "--> Exécuté ! (Non enregistré)"
+				fi
 				echo ""
 			fi
 		fi
