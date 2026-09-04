@@ -5,6 +5,7 @@ L'idée est de créer une invite de commande (comme il existe déjà pour python
 # Installation
 Il suffit de cloner le projet à l'aide de **git clone** puis de rendre exécutable _install.sh_ à l'aide de la commande :
 >chmod +x install.sh<br>
+
 puis d'éxécuter le programme.
 
 # Comment ça fonctionne ?
