@@ -1,5 +1,5 @@
 ok=0
-PATH_INSTALL="$(pwd)/"
+PATH_INSTALL="$(pwd)"
 >"enligne.sh"
 chmod +x enligne.sh
 while read -r ligne
@@ -33,9 +33,9 @@ exit 1
 PATH_CENLIGNE=
 COMPIL="gcc"
 Temp=$PATH_CENLIGNE
-Temp+=temp.c
+Temp+="/temp.c"
 copy_Temp=$PATH_CENLIGNE
-copy_Temp+=copy_temp.c
+copy_Temp+="/copy_temp.c"
 echo "#include <stdio.h>" >$Temp
 echo "int main(int argc, char const *argv[]){" >>$Temp
 echo "}" >>$Temp
@@ -141,7 +141,7 @@ do
 	if [[ "$commande" = ".exe" ]]
 	then
 		echo ""
-		$COMPIL $copy_Temp -o $PATH_CENLIGNE/a.out "${opt[@]}"
+		$COMPIL $Temp -o $PATH_CENLIGNE/a.out "${opt[@]}"
 		if [ $? -eq 0 ]; then
 			echo "--> Execution..."
 			$PATH_CENLIGNE/a.out
