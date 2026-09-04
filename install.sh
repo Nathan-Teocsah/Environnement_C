@@ -12,7 +12,7 @@ do
 			texte+='"'$PATH_INSTALL'"'
 			echo "$texte" >> "enligne.sh"
 		else
-			echo $ligne >> "enligne.sh"
+			echo "$ligne" >> "enligne.sh"
 		fi
 	fi
 
@@ -44,11 +44,12 @@ opt=()
 texte=()
 compte_glob1=0
 compte_glob2=0
+compte_global_prec=0
 set -f
 while true
 do
 	LIGNES=()
-	while read ligne
+	while read -r ligne
 	do
 		LIGNES+=("$ligne")
 	done <$Temp
@@ -66,12 +67,13 @@ do
 		else
 			path_to_file+="/"
 			read -r -p "Nom de la sauvegarde : " name_of_file
-			path_to_file+=$name_of_file
+			path_to_file+="$name_of_file"
 		fi
+		
 		>$path_to_file
 		for ligne_texte in "${LIGNES[@]}"
 		do
-			echo $ligne_texte >>$path_to_file
+			echo "$ligne_texte" >> $path_to_file
 		done
 		echo "--> Energistrement terminé !"
 		continue
@@ -93,6 +95,9 @@ do
 			texte=()
 			opt=()
 			nb=0
+			compte_glob1=0
+			compte_glob2=0
+			compte_global_prec=0
 			>$Temp
 			echo ""
 			echo "--> Chargement..."
@@ -110,7 +115,7 @@ do
 				then
 					echo "> "$ligne
 				fi
-				echo $ligne >> $Temp
+				echo "$ligne" >> $Temp
 				
 			done <$path_to_file
 			compte_global1=$((compte_global1-1))
@@ -132,7 +137,7 @@ do
 		>$Temp
 		for ligne_texte in "${LIGNES[@]}"
 		do
-			echo $ligne_texte >>$Temp
+			echo "$ligne_texte" >>$Temp
 		done
 		echo "--> Ligne supprimée : $derniere_commande"
 		continue
@@ -152,17 +157,17 @@ do
 		continue
 	fi
 	
-	if [[ "$commande" != "link: "* ]]
+	if [ "$commande" = ".r" ]
 	then
-		if [ "$commande" = ".r" ]
-		then
-			echo "#include <stdio.h>" >$Temp
-			echo "int main(int argc, char const *argv[]){" >>$Temp
-			echo "}" >>$Temp
-			echo "---> RESET"
-			continue
-		fi
-		
+		echo "#include <stdio.h>" >$Temp
+		echo "int main(int argc, char const *argv[]){" >>$Temp
+		echo "}" >>$Temp
+		echo "---> RESET"
+		continue
+	fi
+	
+	if [[ "$commande" != "link: "* ]]
+	then		
 		if [[ "$commande" = "#include"* ]]
 		then 
 			if [[ "${texte[@]}" != "" ]]; then
@@ -172,7 +177,7 @@ do
 			echo "$commande" > $copy_Temp
 			while read ligne
 			do
-				echo $ligne >> $copy_Temp
+				echo "$ligne" >> $copy_Temp
 			done <$Temp
 			
 			texte=()
@@ -197,10 +202,12 @@ do
 				fi
 				echo ""
 			fi
+			continue
 		fi
 		
-		if [[ ( "$commande" == *";" && $compte_global1 = $compte_global2 ) || ( $compte_global1 = $compte_global2 && $compte_global1 != 0 ) ]]
+		if [[ ( "$commande" == *";" && $compte_global1 = $compte_global2 ) || ( $compte_global1 = $compte_global2 && $compte_global1 != $compte_global_prec ) ]]
 		then
+			compte_global_prec=$compte_global1
 			>$copy_Temp
 			compte1=0
 			compte2=0
@@ -212,9 +219,9 @@ do
 				then
 					for ligne_texte in "${texte[@]}"
 					do
-						echo $ligne_texte >>$copy_Temp
+						echo "$ligne_texte" >>$copy_Temp
 					done
-					echo $commande >>$copy_Temp
+					echo "$commande" >>$copy_Temp
 					echo "}" >>$copy_Temp
 				else
 					echo "$ligne" >>$copy_Temp
