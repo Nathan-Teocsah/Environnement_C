@@ -146,7 +146,7 @@ do
 	if [[ "$commande" = ".exe" ]]
 	then
 		echo ""
-		$COMPIL $Temp -o $PATH_CENLIGNE/a.out "${opt[@]}"
+		$COMPIL $Temp -o "$PATH_CENLIGNE/a.out" "${opt[@]}"
 		if [ $? -eq 0 ]; then
 			echo "--> Execution..."
 			$PATH_CENLIGNE/a.out
@@ -181,7 +181,7 @@ do
 			done <$Temp
 			
 			texte=()
-			$COMPIL $copy_Temp -o $PATH_CENLIGNE/a.out "${opt[@]}"
+			$COMPIL $copy_Temp -o "$PATH_CENLIGNE/a.out" "${opt[@]}"
 			if [ $? -eq 0 ]; then
 				echo ""
 				echo "--> Execution..."
@@ -229,7 +229,7 @@ do
 			done <$Temp
 			
 			texte=()
-			$COMPIL $copy_Temp -o $PATH_CENLIGNE/a.out "${opt[@]}"
+			$COMPIL $copy_Temp -o "$PATH_CENLIGNE/a.out" "${opt[@]}"
 			
 			if [ $? -eq 0 ]; then
 				echo ""
@@ -256,7 +256,7 @@ do
 		fi
 	else
 		read -r prompt lib <<< "$commande"
-		$COMPIL$Temp "${opt[@]}" "$lib"
+		$COMPIL $copy_Temp -o "$PATH_CENLIGNE/a.out" "${opt[@]}" "$lib"
 
 		if [ $? -eq 0 ]; then
 			opt+=("$lib")
