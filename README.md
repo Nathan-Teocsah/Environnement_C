@@ -2,7 +2,12 @@
 
 L'idée est de créer une invite de commande (comme il existe déjà pour python) permettant d'executer des commandes sans créer de fichier et de la compiler "à la main" :
 
-#Comment ça fonctionne ?
+# Installation
+Il suffit de cloner le projet à l'aide de **git clone** puis de rendre exécutable _install.sh_ à l'aide de la commande :
+>chmod +x install.sh
+puis d'éxécuter le programme.
+
+# Comment ça fonctionne ?
 
 Pour lancer le programme, il suffit d'ouvrir une invite de commande et de taper _compc_ , peu importe depuis quel répertoire on effectue la commande.
 Il suffit d'écrire le code que l'on veut éxécuter dans l'invite de commande et d'appuyer sur entrée
