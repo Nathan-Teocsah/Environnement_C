@@ -23,7 +23,7 @@ do
 done <install.sh
 
 cd 
-echo "alias compc="$PATH_INSTALL"" >> ".bashrc"  
+echo 'alias compc="'$PATH_INSTALL'/enligne.sh"' >> ".bashrc"  
 source .bashrc
 
 exit 1
