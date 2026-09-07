@@ -43,8 +43,26 @@ do
 done <install.sh
 
 cd 
-echo 'alias compc="'$PATH_INSTALL'/enligne.sh"' >> ".bashrc"  
-echo 'alias compcpp="'$PATH_INSTALL'/enlignecpp.sh"' >> ".bashrc"  
+ok1=0
+ok2=0
+alias1='alias compc="'$PATH_INSTALL'/enligne.sh"'
+alias2='alias compcpp="'$PATH_INSTALL'/enlignecpp.sh"'
+while read -r ligne
+do
+	if [ "$ligne" = "$alias1" ]; then ok1=1; fi
+	if [ "$ligne" = "$alias2" ]; then ok2=1; fi
+	if [[ $ok1 = 1 && $ok2 = 1 ]];then break; fi
+done <.bashrc
+
+if [ $ok1 = 0 ]
+then
+	echo "$alias1" >> ".bashrc"  
+fi
+if [ $ok2 = 0 ]
+then
+	echo "$alias2" >> ".bashrc"  
+fi
+
 source .bashrc
 
 exit 1

@@ -11,7 +11,6 @@ echo "using namespace std;" >>$Temp
 echo "int main(int argc, char const *argv[]){" >>$Temp
 echo "}" >>$Temp
 echo "---------- Environnement en ligne C++ ----------"
-opt_init=()
 opt=()
 texte=()
 compte_glob1=0
