@@ -136,7 +136,7 @@ Sur la même ligne on écrit : _link: [opt]_ par exemple : _> link: -lm_
 
 Il suffit simplement d'écrire ce qu'on écrirait dans un script en C :
 >---------- Environnement en ligne C ----------<br>
->\> ##include <stdlib.h><br>
+>\> #include <stdlib.h><br>
 
 Le header stdio.h est déjà écrit, il n'y a pas besoin de le rajouter.
 
