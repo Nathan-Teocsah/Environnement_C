@@ -71,6 +71,7 @@ exit 1
 
 PATH_CENLIGNE=
 COMPIL="gcc"
+RUN=""
 Temp=$PATH_CENLIGNE
 Temp+="/temp.c"
 copy_Temp=$PATH_CENLIGNE
@@ -97,6 +98,34 @@ do
 	read -r -p "> " commande
 	compte_global1=$((compte_global1 + $(echo "$commande" | sed -e 's/\(.\)/\1\n/g' | grep -F { | wc -l)))
 	compte_global2=$((compte_global2 + $(echo "$commande" | sed -e 's/\(.\)/\1\n/g' | grep -F } | wc -l)))
+	
+	if [[ "$commande" = ".comp" ]]
+	then
+		echo "Compilateur actuel : $COMPIL"
+		read -r -p "Compilateur choisi (appuyer sur ENTREE pour annuler) : " COMPIL_temp
+		if [[ $COMPIL_temp != "" ]]
+		then
+			COMPIL=$COMPIL_temp
+		fi
+		continue
+	fi
+	
+	if [[ "$commande" = ".run" ]]
+	then
+		if [[ $RUN = "" ]]
+		then
+			echo "Outil d'éxécution actuel : (AUCUN)"
+		else
+			echo "Outil d'éxécution actuel : $RUN"
+		fi
+			
+		read -r -p "Outil d'éxécution choisi (appuyer sur ENTREE pour annuler) : " RUN_temp
+		if [[ $RUN_temp != "" ]]
+		then
+			RUN=$RUN_temp
+		fi
+		continue
+	fi
 	
 	if [[ "$commande" = ".save" ]]
 	then
@@ -189,7 +218,7 @@ do
 		$COMPIL $Temp -o "$PATH_CENLIGNE/a.out" "${opt[@]}"
 		if [ $? -eq 0 ]; then
 			echo "--> Execution..."
-			$PATH_CENLIGNE/a.out
+			$RUN $PATH_CENLIGNE/a.out
 			echo ""
 			echo "--> Executé !"
 			echo ""
@@ -230,7 +259,7 @@ do
 		if [ $? -eq 0 ]; then
 			echo ""
 			echo "--> Execution..."
-			$PATH_CENLIGNE/a.out
+			$RUN $PATH_CENLIGNE/a.out
 			echo ""
 			aout_exit_code=$?
 			
@@ -282,7 +311,7 @@ do
 		if [ $? -eq 0 ]; then
 			echo ""
 			echo "--> Execution..."
-			$PATH_CENLIGNE/a.out
+			$RUN $PATH_CENLIGNE/a.out
 			echo ""
 			aout_exit_code=$?
 			
@@ -328,7 +357,7 @@ do
 			if [ $? -eq 0 ]; then
 				echo ""
 				echo "--> Execution..."
-				$PATH_CENLIGNE/a.out
+				$RUN $PATH_CENLIGNE/a.out
 				echo ""
 				aout_exit_code=$?
 				
@@ -377,7 +406,7 @@ do
 			if [ $? -eq 0 ]; then
 				echo ""
 				echo "--> Execution..."
-				$PATH_CENLIGNE/a.out
+				$RUN $PATH_CENLIGNE/a.out
 				echo ""
 				aout_exit_code=$?
 				
@@ -414,6 +443,7 @@ done
 
 PATH_CENLIGNE=
 COMPIL="g++"
+RUN=""
 Temp=$PATH_CENLIGNE
 Temp+="/temp.cpp"
 copy_Temp=$PATH_CENLIGNE
@@ -440,6 +470,34 @@ do
 	read -r -p "> " commande
 	compte_global1=$((compte_global1 + $(echo "$commande" | sed -e 's/\(.\)/\1\n/g' | grep -F { | wc -l)))
 	compte_global2=$((compte_global2 + $(echo "$commande" | sed -e 's/\(.\)/\1\n/g' | grep -F } | wc -l)))
+	
+	if [[ "$commande" = ".comp" ]]
+	then
+		echo "Compilateur actuel : $COMPIL"
+		read -r -p "Compilateur choisi (appuyer sur ENTREE pour annuler) : " COMPIL_temp
+		if [[ $COMPIL_temp != "" ]]
+		then
+			COMPIL=$COMPIL_temp
+		fi
+		continue
+	fi
+	
+	if [[ "$commande" = ".run" ]]
+	then
+		if [[ $RUN = "" ]]
+		then
+			echo "Outil d'éxécution actuel : (AUCUN)"
+		else
+			echo "Outil d'éxécution actuel : $RUN"
+		fi
+			
+		read -r -p "Outil d'éxécution choisi (appuyer sur ENTREE pour annuler) : " RUN_temp
+		if [[ $RUN_temp != "" ]]
+		then
+			RUN=$RUN_temp
+		fi
+		continue
+	fi
 	
 	if [[ "$commande" = ".save" ]]
 	then
@@ -532,7 +590,7 @@ do
 		$COMPIL $Temp -o "$PATH_CENLIGNE/b.out" "${opt[@]}"
 		if [ $? -eq 0 ]; then
 			echo "--> Execution..."
-			$PATH_CENLIGNE/b.out
+			$RUN $PATH_CENLIGNE/b.out
 			echo ""
 			echo "--> Executé !"
 			echo ""
@@ -570,11 +628,11 @@ do
 		done <$Temp
 		
 		texte=()
-		$COMPIL $copy_Temp -o "$PATH_CENLIGNE/a.out" "${opt[@]}"
+		$COMPIL $copy_Temp -o "$PATH_CENLIGNE/b.out" "${opt[@]}"
 		if [ $? -eq 0 ]; then
 			echo ""
 			echo "--> Execution..."
-			$PATH_CENLIGNE/a.out
+			$RUN $PATH_CENLIGNE/b.out
 			echo ""
 			aout_exit_code=$?
 			
@@ -622,11 +680,11 @@ do
 		done <$Temp
 		
 		texte=()
-		$COMPIL $copy_Temp -o "$PATH_CENLIGNE/a.out" "${opt[@]}"
+		$COMPIL $copy_Temp -o "$PATH_CENLIGNE/b.out" "${opt[@]}"
 		if [ $? -eq 0 ]; then
 			echo ""
 			echo "--> Execution..."
-			$PATH_CENLIGNE/a.out
+			$RUN $PATH_CENLIGNE/b.out
 			echo ""
 			aout_exit_code=$?
 			
@@ -672,7 +730,7 @@ do
 			if [ $? -eq 0 ]; then
 				echo ""
 				echo "--> Execution..."
-				$PATH_CENLIGNE/b.out
+				$RUN $PATH_CENLIGNE/b.out
 				echo ""
 				aout_exit_code=$?
 				
@@ -721,7 +779,7 @@ do
 			if [ $? -eq 0 ]; then
 				echo ""
 				echo "--> Execution..."
-				$PATH_CENLIGNE/b.out
+				$RUN $PATH_CENLIGNE/b.out
 				echo ""
 				aout_exit_code=$?
 				
