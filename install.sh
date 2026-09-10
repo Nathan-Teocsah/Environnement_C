@@ -84,6 +84,7 @@ texte=()
 compte_glob1=0
 compte_glob2=0
 compte_global_prec=0
+head=0
 set -f
 while true
 do
@@ -205,13 +206,13 @@ do
 		continue
 	fi
 	
-	if [[ "$commande" = "head:"* ]]
+	if [[ "$commande" = "head:"* && "$commande" != "head::"* ]]
 	then 
 		if [[ "${texte[@]}" != "" ]]; then
 			echo "---> commande non valide : il faut d'abord terminer la ligne précédente."
 			continue
 		fi
-		read -r prompt head <<< "$commande"
+		read -r prompt Head <<< "$commande"
 		fin_include=0
 		> $copy_Temp
 		while read -r ligne
@@ -219,7 +220,7 @@ do
 			if [[ $fin_include = 0 && "$ligne" != "#include"* ]]
 			then
 				fin_include=1
-				echo "$head" >> $copy_Temp
+				echo "$Head" >> $copy_Temp
 			fi
 			echo "$ligne" >> $copy_Temp
 		done <$Temp
@@ -246,6 +247,65 @@ do
 			fi
 			echo ""
 		fi
+		continue
+	fi
+	
+	if [[ "$commande" = "head::" ]]
+	then
+		if [[ "${texte[@]}" != "" ]]; then
+			echo "---> commande non valide : il faut d'abord terminer la ligne précédente."
+			continue
+		fi
+		head=1
+		continue
+		
+	elif [[ "$commande" = "::" ]]
+	then
+		head=0
+		fin_include=0
+		> $copy_Temp
+		while read -r ligne
+		do
+			if [[ $fin_include = 0 && "$ligne" != "#include"* ]]
+			then
+				fin_include=1
+				for ligne_head in "${texte[@]}"
+				do
+					echo "$ligne_head" >> $copy_Temp
+				done
+			fi
+			echo "$ligne" >> $copy_Temp
+		done <$Temp
+		
+		texte=()
+		$COMPIL $copy_Temp -o "$PATH_CENLIGNE/a.out" "${opt[@]}"
+		if [ $? -eq 0 ]; then
+			echo ""
+			echo "--> Execution..."
+			$PATH_CENLIGNE/a.out
+			echo ""
+			aout_exit_code=$?
+			
+			if [ $aout_exit_code -eq 0 ]
+			then
+				>$Temp
+				while read -r ligne
+				do
+					echo "$ligne" >>$Temp
+				done <$copy_Temp
+				echo "--> Exécuté !"
+			else
+				echo "--> Exécuté ! (Non enregistré)"
+			fi
+			echo ""
+		fi
+		texte=()
+		continue
+	fi
+	
+	if [[ $head = 1 ]]
+	then 
+		texte+=("$commande")
 		continue
 	fi
 	
@@ -490,13 +550,13 @@ do
 		continue
 	fi
 	
-	if [[ "$commande" = "head:"* ]]
+	if [[ "$commande" = "head:"* && "$commande" != "head::"* ]]
 	then 
 		if [[ "${texte[@]}" != "" ]]; then
 			echo "---> commande non valide : il faut d'abord terminer la ligne précédente."
 			continue
 		fi
-		read -r prompt head <<< "$commande"
+		read -r prompt Head <<< "$commande"
 		fin_include=0
 		> $copy_Temp
 		while read -r ligne
@@ -504,17 +564,17 @@ do
 			if [[ $fin_include = 0 && "$ligne" != "#include"* ]]
 			then
 				fin_include=1
-				echo "$head" >> $copy_Temp
+				echo "$Head" >> $copy_Temp
 			fi
 			echo "$ligne" >> $copy_Temp
 		done <$Temp
 		
 		texte=()
-		$COMPIL $copy_Temp -o "$PATH_CENLIGNE/b.out" "${opt[@]}"
+		$COMPIL $copy_Temp -o "$PATH_CENLIGNE/a.out" "${opt[@]}"
 		if [ $? -eq 0 ]; then
 			echo ""
 			echo "--> Execution..."
-			$PATH_CENLIGNE/b.out
+			$PATH_CENLIGNE/a.out
 			echo ""
 			aout_exit_code=$?
 			
@@ -531,6 +591,65 @@ do
 			fi
 			echo ""
 		fi
+		continue
+	fi
+	
+	if [[ "$commande" = "head::" ]]
+	then
+		if [[ "${texte[@]}" != "" ]]; then
+			echo "---> commande non valide : il faut d'abord terminer la ligne précédente."
+			continue
+		fi
+		head=1
+		continue
+		
+	elif [[ "$commande" = "::" ]]
+	then
+		head=0
+		fin_include=0
+		> $copy_Temp
+		while read -r ligne
+		do
+			if [[ $fin_include = 0 && "$ligne" != "#include"* ]]
+			then
+				fin_include=1
+				for ligne_head in "${texte[@]}"
+				do
+					echo "$ligne_head" >> $copy_Temp
+				done
+			fi
+			echo "$ligne" >> $copy_Temp
+		done <$Temp
+		
+		texte=()
+		$COMPIL $copy_Temp -o "$PATH_CENLIGNE/a.out" "${opt[@]}"
+		if [ $? -eq 0 ]; then
+			echo ""
+			echo "--> Execution..."
+			$PATH_CENLIGNE/a.out
+			echo ""
+			aout_exit_code=$?
+			
+			if [ $aout_exit_code -eq 0 ]
+			then
+				>$Temp
+				while read -r ligne
+				do
+					echo "$ligne" >>$Temp
+				done <$copy_Temp
+				echo "--> Exécuté !"
+			else
+				echo "--> Exécuté ! (Non enregistré)"
+			fi
+			echo ""
+		fi
+		texte=()
+		continue
+	fi
+	
+	if [[ $head = 1 ]]
+	then 
+		texte+=("$commande")
 		continue
 	fi
 	
