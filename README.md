@@ -143,3 +143,11 @@ Le header stdio.h est déjà écrit, il n'y a pas besoin de le rajouter.
 ## Comment compléter l'entête (de manière générale)
 
 Pour compléter l'entête il suffit de taper, comme pour ajouter une option au compilateur, la commande suivante : _head: [texte]_ .
+
+## Comment compléter l'entête (de manière générale) sur plusieurs lignes
+
+Pour compléter l'entête avec plusieurs lignes d'un coup il suffit de taper la commande suivante : _head::_ puis de taper sur "ENTRER" et une fois qu'on a finit de taper ce qu'on veut, on va sur une ligne vierge puis taper _::_ pour indiquer qu'on a finit d'écrire dans l'entête.
+
+## Comment changer de compilateur ?
+
+Pour ça il suffit de taper _.comp_ et de se laisser guider par les instructions. Si on souhaite éxecuter d'une manière spécifique l'éxécutable (par exemple avec mpirun) il suffit de taper _.run_
